@@ -33,7 +33,8 @@ jobs:
         with:
           node-version: "20"
       - name: Install Serverless Framework
-        run: npm install -g serverless
+        # FIX: Pin to version 3 to avoid V4 login requirement
+        run: npm install -g serverless@3
       - name: Deploy to AWS Lambda
         run: serverless deploy --stage prod
         env:
