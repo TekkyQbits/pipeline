@@ -1,42 +1,44 @@
-name: Deploy Data Pipeline
+service: anomaly-pipeline
+frameworkVersion: "3"
 
-on:
-  push:
-    branches:
-      - main
+provider:
+  name: aws
+  runtime: python3.9
+  region: us-east-1
+  environment:
+    BUCKET_NAME: ${self:custom.bucketName}
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:PutObjectAcl
+          Resource: "arn:aws:s3:::${self:custom.bucketName}/*"
 
-jobs:
-  # JOB 1: Continuous Integration (Test the code)
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.9"
-      - name: Install dependencies
-        run: |
-          python -m pip install --upgrade pip
-          pip install pytest boto3
-      - name: Run Unit Tests
-        run: pytest test_handler.py
+custom:
+  bucketName: portfolio-pipeline-bucket-${sls:stage}-${opt:region, self:provider.region}
 
-  # JOB 2: Continuous Deployment (Deploy to AWS)
-  deploy:
-    needs: test # Only run if tests pass
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Set up Node.js (for Serverless Framework)
-        uses: actions/setup-node@v3
-        with:
-          node-version: "18"
-      - name: Install Serverless Framework
-        run: npm install -g serverless
-      - name: Deploy to AWS Lambda
-        run: serverless deploy --stage prod
-        env:
-          # Add these secrets in your GitHub Repo Settings
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+functions:
+  anomalyDetector:
+    handler: handler.lambda_handler
+    events:
+      # Run every 2 minutes automatically
+      - schedule: rate(2 minutes)
+
+resources:
+  Resources:
+    PipelineBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:custom.bucketName}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ["*"]
+              AllowedMethods: [GET, HEAD]
+              AllowedOrigins: ["*"]
+        PublicAccessBlockConfiguration:
+          BlockPublicAcls: false
+          IgnorePublicAcls: false
+          BlockPublicPolicy: false
+          RestrictPublicBuckets: false
