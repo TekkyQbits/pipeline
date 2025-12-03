@@ -91,48 +91,19 @@ In that scenario, the challenge was ensuring that agent runtimes were secure, co
 ├── handler.py           # Core Application Logic (Decoupled from AWS)
 ├── test_handler.py      # Unit Tests (Pytest)
 ├── serverless.yml       # Infrastructure as Code (AWS CloudFormation generation)
-└── README.md            # Documentation
+└── README.md            #
+```
+
+Documentation
+```
 Storage (AWS S3): Processed insights are written atomically to an S3 Data Lake, serving as a highly available "Serverless Database."
 Presentation (React): A decoupled frontend polls S3 for real-time updates, ensuring the UI remains responsive even if the backend is under heavy load.
-🛠 Technical Skills Showcase
-This project explicitly demonstrates competency in the Modern Data Stack:
-Domain
-Technologies & Patterns
-Cloud Infrastructure
-AWS Lambda, AWS S3, IAM Roles, EventBridge
-DevOps & CI/CD
-GitHub Actions, Pytest (Unit Testing), Automated Rollouts
-Infrastructure as Code
-Serverless Framework (YAML), CloudFormation
-Data Engineering
-Micro-batch processing, Windowed Aggregation, Python (Pandas/Boto3)
-Frontend Integration
-React.js, Polling Architecture, Decoupled State Management
+```
 
-🚀 The "PoC Accelerator" Framework
-One of the key deliverables of this project is the deployment framework itself. This repository is not just a single-use pipeline; it is a demonstration of a reusable Infrastructure as Code (IaC) methodology I have applied to solve complex enterprise deployment challenges.
-Proven Success: Informatica IDMC
-I have successfully utilized this exact Serverless + CI/CD framework to deploy Secure Agent Runtime Environments for Informatica IDMC (Intelligent Data Management Cloud).
-In that scenario, the challenge was ensuring that agent runtimes were secure, compliant, and identical across regions. By adapting this framework, I achieved:
-Immutable Infrastructure: Replaced manual server setup with codified definitions, ensuring every Informatica Secure Agent was provisioned with identical security groups and IAM permissions.
-Audit Compliance: The Git-based workflow provided a perfect audit trail of who changed infrastructure and when, a requirement for secure enterprise environments.
-Rapid Scale-Out: We reduced the lead time for standing up new integration environments from days to minutes.
-Core Framework Benefits
-Standardized IaC: The serverless.yml pre-configures standard IAM roles and bucket policies, ensuring security compliance out of the box.
-Built-in Quality Gates: The CI pipeline enforces pytest execution before deployment, preventing broken logic from reaching the cloud.
-Environment Agnostic: The pipeline dynamic injection (${sls:stage}) allows deploying to dev, staging, and prod environments from the same codebase without code changes.
-Result: A reproducible "Cookie Cutter" stack that accelerates the delivery of both Data Pipelines and Enterprise Infrastructure.
-📂 Repository Structure
-.
-├── .github/workflows/   # CI/CD Pipeline Definitions
-│   └── deploy.yml       # GitHub Actions Workflow
-├── handler.py           # Core Application Logic (Decoupled from AWS)
-├── test_handler.py      # Unit Tests (Pytest)
-├── serverless.yml       # Infrastructure as Code (AWS CloudFormation generation)
-└── README.md            # Documentation
+---
 
+## ⚙️ How to Deploy
 
-⚙️ How to Deploy
 Prerequisites
 AWS Account (Access Key & Secret Key)
 GitHub Account
@@ -143,22 +114,30 @@ AWS_ACCESS_KEY_ID
 AWS_SECRET_ACCESS_KEY
 2. Push to Deploy
 This project follows GitOps principles. To deploy updates, simply push to the main branch:
+```
 git add .
 git commit -m "Update anomaly detection threshold"
 git push origin main
-
+```
 
 What happens next?
+```
 GitHub Actions spins up a runner.
-CI Phase: Runs test_handler.py to verify logic.
-CD Phase: Installs Serverless Framework (v3).
-Provisioning: Deploys Lambda functions and configures S3 Buckets via CloudFormation.
-🧪 Local Development
-You can run the logic and tests locally without an AWS account:
-# Install dependencies
-pip install pytest boto3
 
-# Run the test suite
-pytest test_handler.py
+CI Phase: Runs test_handler.py to verify logic.
+
+CD Phase: Installs Serverless Framework (v3).
+
+Provisioning: Deploys Lambda functions and configures S3 Buckets via CloudFormation.
+```
+
+### 🧪 Local Development
+You can run the logic and tests locally without an AWS account:
+
+### Install dependencies
+```pip install pytest boto3```
+
+### Run the test suite
+```pytest test_handler.py```
 
 
