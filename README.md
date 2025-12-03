@@ -16,7 +16,7 @@ The core framework established here serves as a **Rapid Deployment Pattern** oft
 - [The "PoC Accelerator" Framework](#-the-poc-accelerator-framework)
   - [Case Study: Informatica IDMC](#case-study-informatica-idmc)
 - [Repository Structure](#-repository-structure)
-- [Deployment Guide](#-how-to-deploy)
+- [Deployment Guide](#%EF%B8%8F-how-to-deploy)
 - [Local Development](#-local-development)
 
 ---
